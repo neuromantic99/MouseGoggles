@@ -20,9 +20,8 @@ settings/fps/force_fps=60
 
 [display]
 
-window/size/width=240
-window/size/height=420
-window/size/resizable=false
+window/size/width=420
+window/size/height=240
 
 [physics]
 
