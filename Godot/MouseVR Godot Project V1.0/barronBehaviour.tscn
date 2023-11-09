@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://openFieldTowerScene.gd" type="Script" id=1]
+[ext_resource path="res://barronBehaviour.gd" type="Script" id=1]
 [ext_resource path="res://HeadKinBody_monitor.tscn" type="PackedScene" id=2]
 [ext_resource path="res://textures/checkerboard40.png" type="Texture" id=3]
-[ext_resource path="res://textures/1x10 dotted checkerboards/1x10dottedcheckerboard40.png" type="Texture" id=4]
-[ext_resource path="res://textures/1x10 checkerboards/1x10checkerboard40.png" type="Texture" id=5]
-[ext_resource path="res://textures/1x10 horizontal gratings/1x10horizontalgratings8.png" type="Texture" id=6]
+[ext_resource path="res://textures/1x10 horizontal gratings/1x10horizontalgratings8.png" type="Texture" id=4]
+[ext_resource path="res://textures/1x10 dotted checkerboards/1x10dottedcheckerboard40.png" type="Texture" id=5]
+[ext_resource path="res://textures/1x10 checkerboards/1x10checkerboard40.png" type="Texture" id=6]
 [ext_resource path="res://textures/Grating 12 deg spatial wavelength.png" type="Texture" id=7]
 
 [sub_resource type="CubeMesh" id=1]
@@ -15,13 +15,13 @@ albedo_texture = ExtResource( 3 )
 
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.392157, 1, 0.392157, 1 )
-albedo_texture = ExtResource( 4 )
-
-[sub_resource type="SpatialMaterial" id=4]
 albedo_texture = ExtResource( 5 )
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=4]
 albedo_texture = ExtResource( 6 )
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_texture = ExtResource( 4 )
 
 [sub_resource type="SpatialMaterial" id=6]
 albedo_color = Color( 0.392157, 1, 0.392157, 1 )

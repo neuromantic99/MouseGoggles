@@ -149,15 +149,27 @@ func _process(delta):
 			head_z = start_z
 			print("rep " + String(current_rep) + ": head angle " + String(head_yaw_angle))
 	
+
+const KEY_DIST = 50
 	
 func _input(ev):
 	if ev is InputEventKey and ev.is_pressed():
 		if ev.scancode == KEY_ESCAPE:
 			get_tree().quit() 
+		if ev.scancode == KEY_UP:
+			head_thrust += KEY_DIST
+		if ev.scancode == KEY_DOWN:
+			head_thrust -= KEY_DIST
+		if ev.scancode == KEY_RIGHT:
+			head_yaw += KEY_DIST
+		if ev.scancode == KEY_LEFT:
+			head_yaw -= KEY_DIST
+			
 			
 	if ev is InputEventMouseMotion:
 		head_yaw += ev.relative.x
 		head_thrust += ev.relative.y
+	
 		
 	if ev is InputEventMouseButton:
 		if ev.is_pressed():
@@ -186,3 +198,4 @@ func save_logs(current_rep,dataLog,dataNames):
 				n = n+1
 			file.store_string("\r")
 		file.close()
+

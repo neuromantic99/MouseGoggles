@@ -14,18 +14,22 @@ onready var testingbutton = get_node("HBoxContainer/VBoxContainer/MarginContaine
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	habituationbutton.connect("pressed",self,"_load_habituation")
-	loombutton.connect("pressed",self,"_load_loom")
-	cliffbutton.connect("pressed",self,"_load_cliff")
-	linearcliffbutton.connect("pressed",self,"_load_linearCliff")
-	lineartrackbutton.connect("pressed",self,"_load_linearTrack")
-	opentowerbutton.connect("pressed",self,"_load_openfieldTower")
-	openrandombutton.connect("pressed",self,"_load_openfieldRandom")
-	optomotorbutton.connect("pressed",self,"_load_optomotor")
-	testingbutton.connect("pressed",self,"_load_testing")
+	# habituationbutton.connect("pressed",self,"_load_habituation")
+	# loombutton.connect("pressed",self,"_load_loom")
+	# cliffbutton.connect("pressed",self,"_load_cliff")
+	# linearcliffbutton.connect("pressed",self,"_load_linearCliff")
+	# lineartrackbutton.connect("pressed",self,"_load_linearTrack")
+	# opentowerbutton.connect("pressed",self,"_load_openfieldTower")
+	# openrandombutton.connect("pressed",self,"_load_openfieldRandom")
+	# optomotorbutton.connect("pressed",self,"_load_optomotor")
+	# testingbutton.connect("pressed",self,"_load_testing")
+	_load_barron()
 	
 func _load_habituation():
 	get_tree().change_scene("res://habituationScene.tscn")
+	
+func _load_barron():
+	get_tree().change_scene("res://barronBehaviour.tscn")
 	
 func _load_loom():
 	get_tree().change_scene("res://loomScene.tscn")
