@@ -1,36 +1,39 @@
 extends Spatial
 
-const KEY_DIST = 200
+const key_dist = 200
 
-#open field parameters
-export var track_length = 1.5
-export var scene_duration = 1800 #max duration of the scene
-export var trial_duration = 60 #max duration of each trial
-export var scene_name = "openfieldtower"
-export var reward_dur = 0.05 #duration to open liquid reward valve)
-export var num_reps = 40 #max number of trials 
-export var reward_xloc = 0.75 #location of reward (start wall = -0.5, end wall = 0.5)
-export var reward_zloc = 0.75 #location of reward (start wall = -0.5, end wall = 0.5)
-export var min_start_distance = 0.75 #minimum distance the mouse can start from the reward
-export var reward_range = 0.15 #maximum distance to the reward before a reward is given
-export var after_reward_delay = 3 #time after a reward is given before new trial starts
-export var reward_rate = 1.0 #fraction of trials which are rewarded (randomly)
-export var guaranteed_rewards = 3 #number of beginning trials to guarantee rewards
+# Open field parameters:
+# There is a scaling factor that I don't really understand relative to the spatial transform in the 
+# 3d tscn explorer. The origin is shared, but on the explorer the max is 1.5 and the min is -1.5
+# on the goggles, the min is -0.75 and the max is 0.75
+const track_length = 1.5
+const scene_duration = 1800 # Max duration of the scene
+const trial_duration = 60 # Max duration of each trial
+const scene_name = "barronBehaviour"
+const reward_dur = 0.05 # Duration to open liquid reward valve)
+const num_reps = 40 # Max number of trials 
+const reward_xloc = 0 # Location of reward (start wall = -0.5, end wall = 0.5) 0 on 3d explorer 
+const reward_zloc = 0.5 # Location of reward (start wall = -0.5, end wall = 0.5) 0.5 on 3d explorer
+const min_start_distance = 0.75 # Minimum distance the mouse can start from the reward
+const reward_range = 0.15 # Maximum distance to the reward before a reward is given
+const after_reward_delay = 3 # Time after a reward is given before new trial starts
+const reward_rate = 1.0 # Fraction of trials which are rewarded (randomly)
+const guaranteed_rewards = 3 # Number of beginning trials to guarantee rewards
 
-#eye parameters
-export var inter_eye_distance = 0.01
-export var head_radius = 0.04 #must be large enough to keep eye cameras from getting too close to walls
-export var eye_pitch = 10 #degrees from the horizontal
-export var eye_yaw = 45 #degrees away from the head yaw
+# Eye parameters
+const inter_eye_distance = 0.01
+const head_radius = 0.04  # Must be large enough to keep eye cameras from getting too close to walls
+const eye_pitch = 10  # Degrees from the horizontal
+const eye_yaw = 45  # Degrees away from the head yaw
 
-#movement parameters
-export var frames_per_second = 60.0
-export var thrust_gain = -0.01 #meters per step
-export var slip_gain = 0.01 #meters per step
-export var yaw_gain = 5 #degrees per step
-export var mouse_gain = 0.0135
+# Movement parameters
+const frames_per_second = 60.0
+const thrust_gain = -0.01 #meters per step
+const slip_gain = 0.01 #meters per step
+const yaw_gain = 5 #degrees per step
+const mouse_gain = 0.0135
 
-#viewport nodes
+# Viewport nodes
 onready var lefthead = get_node("HeadKinBody/Control/HBoxContainer/ViewportContainer/TextureRect/Viewport/LeftEyeBody")
 onready var righthead = get_node("HeadKinBody/Control/HBoxContainer/ViewportContainer2/TextureRect/Viewport/RightEyeBody")
 onready var lefteye = get_node("HeadKinBody/Control/HBoxContainer/ViewportContainer/TextureRect/Viewport/LeftEyeBody/LeftEyePivot")
@@ -38,18 +41,18 @@ onready var righteye = get_node("HeadKinBody/Control/HBoxContainer/ViewportConta
 onready var colorrect = get_node("HeadKinBody/Control/HBoxContainer/ViewportContainer/ColorRect")
 onready var fpslabel = get_node("HeadKinBody/Control/HBoxContainer/ViewportContainer2/Label")
 
-#head/eye position variables
-var head_yaw = 0 #degrees; 0 points along -z; 90 points to +x
-var head_thrust = 0 #+ points to -z
-var head_slip = 0 #+ points to +x
+# Head/eye position variables
+var head_yaw = 0 # Degrees; 0 points along -z; 90 points to +x
+var head_thrust = 0 # +points to -z
+var head_slip = 0 # +points to +x
 var head_x = 0
 var head_z = 0
 var head_y = 0
 var head_yaw_angle = 0
-var LeftEyeDirection = Vector3.ZERO #direction the left eye is pointing
-var RightEyeDirection = Vector3.ZERO #
+var LeftEyeDirection = Vector3.ZERO # Direction the left eye is pointing
+var RightEyeDirection = Vector3.ZERO 
 
-#logging/saving stuff
+# Logging/saving stuff
 var current_rep = 1
 var rewarded = 0
 var reward_trial = 1
@@ -74,7 +77,7 @@ func _ready():
 	ms_start = OS.get_ticks_msec()
 	timestamp = String(td.year) + "_" + String(td.month) + "_" + String(td.day) + "_" + String(td.hour) + "_" + String(td.minute) + "_" + String(td.second)
 
-	#head positions
+	# Head positions
 	randomize()
 	head_y = 0.01 + head_radius
 	head_yaw_angle = randf()*360
@@ -107,12 +110,17 @@ func _process(delta):
 	fps = times.size()
 	current_frame += 1
 	
-	print("distance to reward: " + String(distance_to_reward))
 	#calculate head position
 	head_yaw_angle += mouse_gain*yaw_gain*head_yaw
 	head_z += mouse_gain*(thrust_gain*head_thrust*cos(deg2rad(head_yaw_angle)) + slip_gain*head_slip*sin(deg2rad(head_yaw_angle)))
 	head_x += mouse_gain*(-thrust_gain*head_thrust*sin(deg2rad(head_yaw_angle)) + slip_gain*head_slip*cos(deg2rad(head_yaw_angle)))
 	#fpslabel.text = str(head_x) 
+
+	if (current_frame % 10) == 0:
+		print("Distance to reward: " + String(distance_to_reward))
+		print("Head_x", String(head_x))
+		print("Head_z", String(head_z))
+		print("\n")
 	
 	#keep head inside of linear track
 	if head_z>((track_length/2)-head_radius):
@@ -203,13 +211,13 @@ func _input(ev):
 		if ev.scancode == KEY_ESCAPE:
 			get_tree().quit() 
 		if ev.scancode == KEY_UP:
-			head_thrust += KEY_DIST
+			head_thrust += key_dist
 		if ev.scancode == KEY_DOWN:
-			head_thrust -= KEY_DIST
+			head_thrust -= key_dist
 		if ev.scancode == KEY_RIGHT:
-			head_yaw += KEY_DIST
+			head_yaw += key_dist
 		if ev.scancode == KEY_LEFT:
-			head_yaw -= KEY_DIST
+			head_yaw -= key_dist
 
 			
 	if ev is InputEventMouseMotion:
