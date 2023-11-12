@@ -1,6 +1,4 @@
-[gd_scene load_steps=12 format=2]
-
-; --------------- external resources --------------------
+[gd_scene load_steps=19 format=2]
 
 ; Task and mouse setup
 [ext_resource path="res://barronBehaviour.gd" type="Script" id=1]
@@ -56,6 +54,21 @@ albedo_color = Color( 1, 1, 0, 1 )
 material = SubResource( 7 )
 top_radius = 0.15
 bottom_radius = 0.0
+height = 0.3
+
+; visual stim 1
+[sub_resource type="SpatialMaterial" id=79]
+params_cull_mode = 2
+albedo_color = Color( 0.392157, 1, 0.392157, 1 )
+
+; visual stim 2
+[sub_resource type="SpatialMaterial" id=101]
+params_cull_mode = 2
+albedo_color = Color( 1, 1, 0, 1 )
+[sub_resource type="CylinderMesh" id=91]
+material = SubResource( 101 )
+top_radius = 0.15
+bottom_radius = 0.15
 height = 0.3
 
 ; --------------------------------------------------------
@@ -125,6 +138,21 @@ transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0.5, 1 )
 [node name="MeshInstance" type="MeshInstance" parent="reward/rewardpivot"]
 mesh = SubResource( 8 )
 
+; Visual stim 1
+[node name="visualStim1" type="KinematicBody" parent="."]
+transform = Transform( 0.01, 0, 0, 0, 0.2, 0, 0, 0, 1.3, 1.5, 1, 0 )
+__meta__ = {
+"_editor_description_": "	"
+}
+[node name="MeshInstance" type="MeshInstance" parent="visualStim1"]
+mesh = SubResource( 1 )
+material/0 = SubResource( 79 )
+
+; Visual stim 2
+[node name="visualStim2" type="KinematicBody" parent="."]
+transform = Transform( -2.18557e-07, -0.01, 0, 5, -4.37114e-10, 0, 0, 0, 5, -1.5, 1, 0 )
+[node name="vs2pivot" type="Spatial" parent="visualStim2"]
+[node name="visualStim2" type="MeshInstance" parent="visualStim2/vs2pivot"]
+mesh = SubResource( 91 )
 
 [node name="HeadKinBody" parent="." instance=ExtResource( 2 )]
-skeleton = NodePath("../..")
