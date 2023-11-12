@@ -1,93 +1,130 @@
 [gd_scene load_steps=12 format=2]
 
+; --------------- external resources --------------------
+
+; Task and mouse setup
 [ext_resource path="res://barronBehaviour.gd" type="Script" id=1]
 [ext_resource path="res://HeadKinBody_monitor.tscn" type="PackedScene" id=2]
-[ext_resource path="res://textures/checkerboard40.png" type="Texture" id=3]
-[ext_resource path="res://textures/1x10 dotted checkerboards/1x10dottedcheckerboard40.png" type="Texture" id=4]
+; Floor
+[ext_resource path="res://textures/checkerboard80.png" type="Texture" id=3]
+; Wall 1
+[ext_resource path="res://textures/checkerboard40.png" type="Texture" id=4]
+; Wall 2
+[ext_resource path="res://textures/checkerboard160.png" type="Texture" id=5]
+; Wall 3
+[ext_resource path="res://textures/dottedcheckerboard160.png" type="Texture" id=6]
+; Wall 4
 [ext_resource path="res://textures/Grating 12 deg spatial wavelength.png" type="Texture" id=7]
 
+; --------------------------------------------------------
+
+; ------------------ sub resources -----------------------
+
+; Mesh used by all nodes
 [sub_resource type="CubeMesh" id=1]
 
+; Floor
 [sub_resource type="SpatialMaterial" id=2]
 albedo_texture = ExtResource( 3 )
 
+; Wall 1 texture
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.392157, 1, 0.392157, 1 )
 albedo_texture = ExtResource( 4 )
 
+; Wall 2
+; id 4 was causing issues for some reason
+[sub_resource type="SpatialMaterial" id=41]
+albedo_color = Color( 0.392157, 1, 0.392157, 1 )
+albedo_texture = ExtResource( 5 )
+
+; Wall 3
+[sub_resource type="SpatialMaterial" id=50]
+albedo_texture = ExtResource( 6 )
+
+; Wall 4 texture
 [sub_resource type="SpatialMaterial" id=6]
 albedo_color = Color( 0.392157, 1, 0.392157, 1 )
 albedo_texture = ExtResource( 7 )
 
-[sub_resource type="SpatialMaterial" id=4]
+; Reward textures
+[sub_resource type="SpatialMaterial" id=7]
 params_cull_mode = 2
 albedo_color = Color( 1, 1, 0, 1 )
 
-[sub_resource type="CylinderMesh" id=5]
-material = SubResource( 4 )
+[sub_resource type="CylinderMesh" id=8]
+material = SubResource( 7 )
 top_radius = 0.15
 bottom_radius = 0.0
 height = 0.3
 
+; --------------------------------------------------------
+
+
+; ------------------------- Nodes ------------------------
+; Script
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
 
+; Floor nodes
 [node name="floor" type="KinematicBody" parent="."]
 transform = Transform( 1.5, 0, 0, 0, 0.05, 0, 0, 0, 1.5, 0, -0.05, 0 )
 __meta__ = {
 "_editor_description_": "	"
 }
-
 [node name="MeshInstance" type="MeshInstance" parent="floor"]
 mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
 
+; Wall 1
 [node name="wall1" type="KinematicBody" parent="."]
 transform = Transform( 1.5, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 1, 1.6 )
 __meta__ = {
 "_editor_description_": "	"
 }
-
 [node name="MeshInstance" type="MeshInstance" parent="wall1"]
 mesh = SubResource( 1 )
 material/0 = SubResource( 3 )
 
+; Wall 2
 [node name="wall2" type="KinematicBody" parent="."]
 transform = Transform( 1.5, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 1, -1.6 )
 __meta__ = {
 "_editor_description_": "	"
 }
-
 [node name="MeshInstance" type="MeshInstance" parent="wall2"]
 mesh = SubResource( 1 )
-material/0 = SubResource( 2 )
+material/0 = SubResource( 41 )
 
+
+; Wall 3
 [node name="wall3" type="KinematicBody" parent="."]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 1.5, 1.6, 1, 0 )
 __meta__ = {
 "_editor_description_": "	"
 }
-
 [node name="MeshInstance" type="MeshInstance" parent="wall3"]
 mesh = SubResource( 1 )
+material/0 = SubResource( 50 )
 
+
+; Wall 4
 [node name="wall4" type="KinematicBody" parent="."]
 transform = Transform( 0.1, 0, 0, 0, 1, 0, 0, 0, 1.5, -1.6, 1, 0 )
 __meta__ = {
 "_editor_description_": "	"
 }
-
 [node name="MeshInstance" type="MeshInstance" parent="wall4"]
 mesh = SubResource( 1 )
 material/0 = SubResource( 6 )
 
-[node name="HeadKinBody" parent="." instance=ExtResource( 2 )]
-
+; Reward
 [node name="reward" type="KinematicBody" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0.5, 1 )
-
 [node name="rewardpivot" type="Spatial" parent="reward"]
-
 [node name="MeshInstance" type="MeshInstance" parent="reward/rewardpivot"]
-mesh = SubResource( 5 )
+mesh = SubResource( 8 )
+
+
+[node name="HeadKinBody" parent="." instance=ExtResource( 2 )]
 skeleton = NodePath("../..")
